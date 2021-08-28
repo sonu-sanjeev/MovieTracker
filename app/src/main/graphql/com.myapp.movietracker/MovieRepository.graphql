@@ -1,5 +1,5 @@
-query GetMovies {
-  movies(first: 10) {
+query GetMovies($count: Int!) {
+  movies(first: $count) {
     edges {
       node {
         title
