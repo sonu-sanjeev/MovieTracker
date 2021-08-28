@@ -23,6 +23,11 @@ class MoviesViewModel(private val getMovieListUseCase: GetMovieListUseCase) : Vi
     val error: LiveData<String>
         get() = _error
 
+    private val _isAddMovies = MutableLiveData<Boolean>()
+    val isAddMovies: LiveData<Boolean>
+        get() = _isAddMovies
+
+
     init {
         getMoviesListFromServer()
     }
@@ -50,5 +55,9 @@ class MoviesViewModel(private val getMovieListUseCase: GetMovieListUseCase) : Vi
         } ?: kotlin.run {
             _error.postValue("No movies found!")
         }
+    }
+
+    fun isAddMovies(value: Boolean) {
+        _isAddMovies.value = value
     }
 }

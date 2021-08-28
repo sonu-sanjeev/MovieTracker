@@ -3,4 +3,9 @@
     <string name="my_movie_list">My Movie List</string>
     <string name="fab_icon">Fab Icon</string>
     <string name="movies_icon">Movies Icon</string>
+    <string name="add_movie">Add Movie</string>
+    <string name="movie_name">Movie Name:</string>
+    <string name="release_date">Release Date:</string>
+    <string name="season">Season:</string>
+    <string name="add">ADD</string>
 </resources>
