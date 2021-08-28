@@ -1,7 +1,10 @@
 package com.myapp.movietracker.domain
 
+import com.apollographql.apollo.api.Input
 import com.google.common.truth.Truth.assertThat
 import com.myapp.movietracker.api.GraphQlResponse
+import com.myapp.movietracker.type.CreateMovieFieldsInput
+import com.myapp.movietracker.type.CreateMovieInput
 import com.myapp.movietracker.util.getDate
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -34,6 +37,11 @@ class MoviesRepositoryImplTest {
 
         assertThat(response).isNotNull()
         assertThat(response).isInstanceOf(GraphQlResponse.Error::class.java)
+    }
+
+    @Test
+    fun  `test createMovie mutation on success`() {
+
     }
 
     @Test

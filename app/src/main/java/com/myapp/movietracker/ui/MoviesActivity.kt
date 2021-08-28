@@ -26,10 +26,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.myapp.movietracker.GetMoviesQuery
 import com.myapp.movietracker.ui.theme.MovieTrackerTheme
 import com.myapp.movietracker.R
-import com.myapp.movietracker.domain.GetMovieListUseCase
-import com.myapp.movietracker.domain.GetMovieListUseCaseImpl
-import com.myapp.movietracker.domain.MoviesRepository
-import com.myapp.movietracker.domain.MoviesRepositoryImpl
+import com.myapp.movietracker.domain.*
 import com.myapp.movietracker.ui.theme.SecondaryTextColor
 import com.myapp.movietracker.ui.viewmodel.MoviesViewModel
 import com.myapp.movietracker.ui.viewmodel.MoviesViewModelFactory
@@ -40,7 +37,10 @@ class MoviesActivity : ComponentActivity() {
     private val moviesRepository: MoviesRepository = MoviesRepositoryImpl()
     private val getMoviesListUseCase: GetMovieListUseCase =
         GetMovieListUseCaseImpl(moviesRepository)
-    private val moviesViewModelFactory = MoviesViewModelFactory(getMoviesListUseCase)
+    private val createMovieUseCase: CreateMovieUseCase =
+        CreateMovieUseCaseImpl(moviesRepository)
+    private val moviesViewModelFactory =
+        MoviesViewModelFactory(getMoviesListUseCase, createMovieUseCase)
     private lateinit var moviesViewModel: MoviesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,7 +92,9 @@ fun HomeScreen(moviesViewModel: MoviesViewModel) {
         },
         content = {
             if (isAddMovieScreen) {
-                AddMovieScreen()
+                AddMovieScreen {
+
+                }
             } else {
                 MovieListScreen(movies = movies, isLoading = isLoading, error = error)
             }
@@ -186,7 +188,7 @@ fun MovieCard(movie: GetMoviesQuery.Node) {
 }
 
 @Composable
-fun AddMovieScreen() {
+fun AddMovieScreen(onAddClick: () -> Unit) {
     Column(
         Modifier
             .fillMaxSize()

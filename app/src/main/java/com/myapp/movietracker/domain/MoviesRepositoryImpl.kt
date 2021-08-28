@@ -1,9 +1,11 @@
 package com.myapp.movietracker.domain
 
 import com.apollographql.apollo.coroutines.await
+import com.myapp.movietracker.CreateMovieMutation
 import com.myapp.movietracker.GetMoviesQuery
 import com.myapp.movietracker.api.GraphQlApolloClient
 import com.myapp.movietracker.api.GraphQlResponse
+import com.myapp.movietracker.type.CreateMovieInput
 
 class MoviesRepositoryImpl : MoviesRepository {
 
@@ -15,6 +17,21 @@ class MoviesRepositoryImpl : MoviesRepository {
             val data = response.data
             if (!response.hasErrors() && data != null) {
                 GraphQlResponse.success(data.movies)
+            } else {
+                GraphQlResponse.error()
+            }
+        } catch (exception: Exception) {
+            GraphQlResponse.error(exception)
+        }
+    }
+
+    override suspend fun createMovie(createMovieInput: CreateMovieInput): GraphQlResponse<CreateMovieMutation.Movie> {
+        return try {
+            val response =
+                GraphQlApolloClient.apolloClient.mutate(CreateMovieMutation(createMovieInput)).await()
+            val data = response.data?.createMovie
+            if (!response.hasErrors() && data != null) {
+                GraphQlResponse.success(data.movie)
             } else {
                 GraphQlResponse.error()
             }

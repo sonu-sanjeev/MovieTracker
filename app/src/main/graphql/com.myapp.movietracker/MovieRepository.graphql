@@ -9,3 +9,13 @@ query GetMovies($count: Int!) {
     }
   }
 }
+
+mutation CreateMovie($createMovieInput: CreateMovieInput!) {
+  createMovie(input: $createMovieInput) {
+    movie {
+      title
+      releaseDate
+      seasons
+    }
+  }
+}

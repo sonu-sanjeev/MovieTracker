@@ -6,11 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myapp.movietracker.GetMoviesQuery
 import com.myapp.movietracker.api.GraphQlResponse
+import com.myapp.movietracker.domain.CreateMovieUseCase
 import com.myapp.movietracker.domain.GetMovieListUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MoviesViewModel(private val getMovieListUseCase: GetMovieListUseCase) : ViewModel() {
+class MoviesViewModel(
+    private val getMovieListUseCase: GetMovieListUseCase,
+    private val createMovieUseCase: CreateMovieUseCase
+) : ViewModel() {
 
     private val _movies = MutableLiveData<List<GetMoviesQuery.Node>>()
     val movies: LiveData<List<GetMoviesQuery.Node>> = _movies
