@@ -1,0 +1,1010 @@
+directive @specifiedBy(url: String!) on SCALAR
+type ACL {
+  users: [UserACL!]
+  roles: [RoleACL!]
+  public: PublicACL
+}
+
+input ACLInput {
+  users: [UserACLInput!]
+  roles: [RoleACLInput!]
+  public: PublicACLInput
+}
+
+scalar Any
+
+union ArrayResult = Element | Role | User | Movie
+input ArrayWhereInput {
+  equalTo: Any
+  notEqualTo: Any
+  lessThan: Any
+  lessThanOrEqualTo: Any
+  greaterThan: Any
+  greaterThanOrEqualTo: Any
+  in: [Any]
+  notIn: [Any]
+  exists: Boolean
+  containedBy: [Any]
+  contains: [Any]
+  inQueryKey: SelectInput
+  notInQueryKey: SelectInput
+}
+
+input BooleanWhereInput {
+  equalTo: Boolean
+  notEqualTo: Boolean
+  exists: Boolean
+  inQueryKey: SelectInput
+  notInQueryKey: SelectInput
+}
+
+input BoxInput {
+  bottomLeft: GeoPointInput!
+  upperRight: GeoPointInput!
+}
+
+scalar Bytes
+
+input BytesWhereInput {
+  equalTo: Bytes
+  notEqualTo: Bytes
+  lessThan: Bytes
+  lessThanOrEqualTo: Bytes
+  greaterThan: Bytes
+  greaterThanOrEqualTo: Bytes
+  in: [Bytes]
+  notIn: [Bytes]
+  exists: Boolean
+  inQueryKey: SelectInput
+  notInQueryKey: SelectInput
+}
+
+input CenterSphereInput {
+  center: GeoPointInput!
+  distance: Float!
+}
+
+type Class {
+  name: String!
+  schemaFields: [SchemaField!]!
+}
+
+input CreateClassInput {
+  name: String!
+  schemaFields: SchemaFieldsInput
+  clientMutationId: String
+}
+
+type CreateClassPayload {
+  class: Class!
+  clientMutationId: String
+}
+
+input CreateFileInput {
+  upload: Upload!
+  clientMutationId: String
+}
+
+type CreateFilePayload {
+  fileInfo: FileInfo!
+  clientMutationId: String
+}
+
+input CreateMovieFieldsInput {
+  ACL: ACLInput
+  title: String!
+  releaseDate: Date
+  seasons: Float
+}
+
+input CreateMovieInput {
+  fields: CreateMovieFieldsInput
+  clientMutationId: String
+}
+
+type CreateMoviePayload {
+  movie: Movie!
+  clientMutationId: String
+}
+
+input CreateRoleFieldsInput {
+  ACL: ACLInput
+  name: String
+  users: UserRelationInput
+  roles: RoleRelationInput
+}
+
+input CreateRoleInput {
+  fields: CreateRoleFieldsInput
+  clientMutationId: String
+}
+
+type CreateRolePayload {
+  role: Role!
+  clientMutationId: String
+}
+
+input CreateUserFieldsInput {
+  ACL: ACLInput
+  username: String!
+  password: String!
+  email: String
+  emailVerified: Boolean
+  authData: Object
+}
+
+input CreateUserInput {
+  fields: CreateUserFieldsInput
+  clientMutationId: String
+}
+
+type CreateUserPayload {
+  user: User!
+  clientMutationId: String
+}
+
+scalar Date
+
+input DateWhereInput {
+  equalTo: Date
+  notEqualTo: Date
+  lessThan: Date
+  lessThanOrEqualTo: Date
+  greaterThan: Date
+  greaterThanOrEqualTo: Date
+  in: [Date]
+  notIn: [Date]
+  exists: Boolean
+  inQueryKey: SelectInput
+  notInQueryKey: SelectInput
+}
+
+input DeleteClassInput {
+  name: String!
+  clientMutationId: String
+}
+
+type DeleteClassPayload {
+  class: Class!
+  clientMutationId: String
+}
+
+input DeleteMovieInput {
+  id: ID!
+  clientMutationId: String
+}
+
+type DeleteMoviePayload {
+  movie: Movie!
+  clientMutationId: String
+}
+
+input DeleteRoleInput {
+  id: ID!
+  clientMutationId: String
+}
+
+type DeleteRolePayload {
+  role: Role!
+  clientMutationId: String
+}
+
+input DeleteUserInput {
+  id: ID!
+  clientMutationId: String
+}
+
+type DeleteUserPayload {
+  user: User!
+  clientMutationId: String
+}
+
+type Element {
+  value: Any!
+}
+
+scalar File
+
+type FileInfo {
+  name: String!
+  url: String!
+}
+
+input FileInput {
+  file: File
+  upload: Upload
+  unlink: Boolean
+}
+
+input FileWhereInput {
+  equalTo: File
+  notEqualTo: File
+  lessThan: File
+  lessThanOrEqualTo: File
+  greaterThan: File
+  greaterThanOrEqualTo: File
+  in: [File]
+  notIn: [File]
+  exists: Boolean
+  matchesRegex: String
+  options: String
+  inQueryKey: SelectInput
+  notInQueryKey: SelectInput
+}
+
+input GeoIntersectsInput {
+  point: GeoPointInput
+}
+
+type GeoPoint {
+  latitude: Float!
+  longitude: Float!
+}
+
+input GeoPointInput {
+  latitude: Float!
+  longitude: Float!
+}
+
+input GeoPointWhereInput {
+  exists: Boolean
+  nearSphere: GeoPointInput
+  maxDistance: Float
+  maxDistanceInRadians: Float
+  maxDistanceInMiles: Float
+  maxDistanceInKilometers: Float
+  within: WithinInput
+  geoWithin: GeoWithinInput
+}
+
+input GeoWithinInput {
+  polygon: [GeoPointInput!]
+  centerSphere: CenterSphereInput
+}
+
+input IdWhereInput {
+  equalTo: ID
+  notEqualTo: ID
+  lessThan: ID
+  lessThanOrEqualTo: ID
+  greaterThan: ID
+  greaterThanOrEqualTo: ID
+  in: [ID]
+  notIn: [ID]
+  exists: Boolean
+  inQueryKey: SelectInput
+  notInQueryKey: SelectInput
+}
+
+input KeyValueInput {
+  key: String!
+  value: Any!
+}
+
+input LogInInput {
+  username: String!
+  password: String!
+  clientMutationId: String
+}
+
+type LogInPayload {
+  viewer: Viewer!
+  clientMutationId: String
+}
+
+input LogInWithInput {
+  authData: Object!
+  fields: UserLoginWithInput
+  clientMutationId: String
+}
+
+type LogInWithPayload {
+  viewer: Viewer!
+  clientMutationId: String
+}
+
+input LogOutInput {
+  clientMutationId: String
+}
+
+type LogOutPayload {
+  ok: Boolean!
+  clientMutationId: String
+}
+
+type Movie implements ParseObject, Node {
+  id: ID!
+  objectId: ID!
+  createdAt: Date!
+  updatedAt: Date!
+  ACL: ACL!
+  title: String!
+  releaseDate: Date
+  seasons: Float
+}
+
+type MovieConnection {
+  pageInfo: PageInfo!
+  edges: [MovieEdge]
+  count: Int!
+}
+
+type MovieEdge {
+  node: Movie
+  cursor: String!
+}
+
+enum MovieOrder {
+  objectId_ASC
+  objectId_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  ACL_ASC
+  ACL_DESC
+  title_ASC
+  title_DESC
+  releaseDate_ASC
+  releaseDate_DESC
+  seasons_ASC
+  seasons_DESC
+  id_ASC
+  id_DESC
+}
+
+input MoviePointerInput {
+  link: ID
+  createAndLink: CreateMovieFieldsInput
+}
+
+input MovieRelationInput {
+  add: [ID!]
+  remove: [ID!]
+  createAndAdd: [CreateMovieFieldsInput!]
+}
+
+input MovieRelationWhereInput {
+  have: MovieWhereInput
+  haveNot: MovieWhereInput
+  exists: Boolean
+}
+
+input MovieWhereInput {
+  objectId: IdWhereInput
+  createdAt: DateWhereInput
+  updatedAt: DateWhereInput
+  ACL: ObjectWhereInput
+  title: StringWhereInput
+  releaseDate: DateWhereInput
+  seasons: NumberWhereInput
+  id: IdWhereInput
+  OR: [MovieWhereInput!]
+  AND: [MovieWhereInput!]
+  NOR: [MovieWhereInput!]
+}
+
+type Mutation {
+  createRole(input: CreateRoleInput!): CreateRolePayload
+  updateRole(input: UpdateRoleInput!): UpdateRolePayload
+  deleteRole(input: DeleteRoleInput!): DeleteRolePayload
+  createUser(input: CreateUserInput!): CreateUserPayload
+  updateUser(input: UpdateUserInput!): UpdateUserPayload
+  deleteUser(input: DeleteUserInput!): DeleteUserPayload
+  createMovie(input: CreateMovieInput!): CreateMoviePayload
+  updateMovie(input: UpdateMovieInput!): UpdateMoviePayload
+  deleteMovie(input: DeleteMovieInput!): DeleteMoviePayload
+  createFile(input: CreateFileInput!): CreateFilePayload
+  signUp(input: SignUpInput!): SignUpPayload
+  logInWith(input: LogInWithInput!): LogInWithPayload
+  logIn(input: LogInInput!): LogInPayload
+  logOut(input: LogOutInput!): LogOutPayload
+  resetPassword(input: ResetPasswordInput!): ResetPasswordPayload
+  sendVerificationEmail(
+    input: SendVerificationEmailInput!
+  ): SendVerificationEmailPayload
+  createClass(input: CreateClassInput!): CreateClassPayload
+  updateClass(input: UpdateClassInput!): UpdateClassPayload
+  deleteClass(input: DeleteClassInput!): DeleteClassPayload
+}
+
+interface Node {
+  id: ID!
+}
+
+input NumberWhereInput {
+  equalTo: Float
+  notEqualTo: Float
+  lessThan: Float
+  lessThanOrEqualTo: Float
+  greaterThan: Float
+  greaterThanOrEqualTo: Float
+  in: [Float]
+  notIn: [Float]
+  exists: Boolean
+  inQueryKey: SelectInput
+  notInQueryKey: SelectInput
+}
+
+scalar Object
+
+input ObjectWhereInput {
+  equalTo: KeyValueInput
+  notEqualTo: KeyValueInput
+  in: [KeyValueInput]
+  notIn: [KeyValueInput]
+  lessThan: KeyValueInput
+  lessThanOrEqualTo: KeyValueInput
+  greaterThan: KeyValueInput
+  greaterThanOrEqualTo: KeyValueInput
+  exists: Boolean
+  inQueryKey: SelectInput
+  notInQueryKey: SelectInput
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+interface ParseObject {
+  objectId: ID!
+  createdAt: Date!
+  updatedAt: Date!
+  ACL: ACL!
+}
+
+input PointerFieldInput {
+  name: String!
+  targetClassName: String!
+}
+
+input PolygonWhereInput {
+  exists: Boolean
+  geoIntersects: GeoIntersectsInput
+}
+
+type PublicACL {
+  read: Boolean
+  write: Boolean
+}
+
+input PublicACLInput {
+  read: Boolean!
+  write: Boolean!
+}
+
+type Query {
+  node(id: ID!): Node
+  role(
+    id: ID!
+    options: ReadOptionsInput
+  ): Role!
+  roles(
+    where: RoleWhereInput
+    order: [RoleOrder!]
+    skip: Int
+    after: String
+    first: Int
+    before: String
+    last: Int
+    options: ReadOptionsInput
+  ): RoleConnection!
+  user(
+    id: ID!
+    options: ReadOptionsInput
+  ): User!
+  users(
+    where: UserWhereInput
+    order: [UserOrder!]
+    skip: Int
+    after: String
+    first: Int
+    before: String
+    last: Int
+    options: ReadOptionsInput
+  ): UserConnection!
+  movie(
+    id: ID!
+    options: ReadOptionsInput
+  ): Movie!
+  movies(
+    where: MovieWhereInput
+    order: [MovieOrder!]
+    skip: Int
+    after: String
+    first: Int
+    before: String
+    last: Int
+    options: ReadOptionsInput
+  ): MovieConnection!
+  health: Boolean!
+  viewer: Viewer!
+  class(name: String!): Class!
+  classes: [Class!]!
+}
+
+input ReadOptionsInput {
+  readPreference: ReadPreference
+  includeReadPreference: ReadPreference
+  subqueryReadPreference: ReadPreference
+}
+
+enum ReadPreference {
+  PRIMARY
+  PRIMARY_PREFERRED
+  SECONDARY
+  SECONDARY_PREFERRED
+  NEAREST
+}
+
+input RelationFieldInput {
+  name: String!
+  targetClassName: String!
+}
+
+input ResetPasswordInput {
+  email: String!
+  clientMutationId: String
+}
+
+type ResetPasswordPayload {
+  ok: Boolean!
+  clientMutationId: String
+}
+
+type Role implements ParseObject, Node {
+  id: ID!
+  objectId: ID!
+  createdAt: Date!
+  updatedAt: Date!
+  ACL: ACL!
+  name: String
+  users(
+    where: UserWhereInput
+    order: [UserOrder!]
+    skip: Int
+    after: String
+    first: Int
+    before: String
+    last: Int
+    options: ReadOptionsInput
+  ): UserConnection!
+  roles(
+    where: RoleWhereInput
+    order: [RoleOrder!]
+    skip: Int
+    after: String
+    first: Int
+    before: String
+    last: Int
+    options: ReadOptionsInput
+  ): RoleConnection!
+}
+
+type RoleACL {
+  roleName: ID!
+  read: Boolean!
+  write: Boolean!
+}
+
+input RoleACLInput {
+  roleName: String!
+  read: Boolean!
+  write: Boolean!
+}
+
+type RoleConnection {
+  pageInfo: PageInfo!
+  edges: [RoleEdge]
+  count: Int!
+}
+
+type RoleEdge {
+  node: Role
+  cursor: String!
+}
+
+enum RoleOrder {
+  objectId_ASC
+  objectId_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  ACL_ASC
+  ACL_DESC
+  name_ASC
+  name_DESC
+  users_ASC
+  users_DESC
+  roles_ASC
+  roles_DESC
+  id_ASC
+  id_DESC
+}
+
+input RolePointerInput {
+  link: ID
+  createAndLink: CreateRoleFieldsInput
+}
+
+input RoleRelationInput {
+  add: [ID!]
+  remove: [ID!]
+  createAndAdd: [CreateRoleFieldsInput!]
+}
+
+input RoleRelationWhereInput {
+  have: RoleWhereInput
+  haveNot: RoleWhereInput
+  exists: Boolean
+}
+
+input RoleWhereInput {
+  objectId: IdWhereInput
+  createdAt: DateWhereInput
+  updatedAt: DateWhereInput
+  ACL: ObjectWhereInput
+  name: StringWhereInput
+  users: UserRelationWhereInput
+  roles: RoleRelationWhereInput
+  id: IdWhereInput
+  OR: [RoleWhereInput!]
+  AND: [RoleWhereInput!]
+  NOR: [RoleWhereInput!]
+}
+
+type SchemaACLField implements SchemaField {
+  name: String!
+}
+
+type SchemaArrayField implements SchemaField {
+  name: String!
+}
+
+input SchemaArrayFieldInput {
+  name: String!
+}
+
+type SchemaBooleanField implements SchemaField {
+  name: String!
+}
+
+input SchemaBooleanFieldInput {
+  name: String!
+}
+
+type SchemaBytesField implements SchemaField {
+  name: String!
+}
+
+input SchemaBytesFieldInput {
+  name: String!
+}
+
+type SchemaDateField implements SchemaField {
+  name: String!
+}
+
+input SchemaDateFieldInput {
+  name: String!
+}
+
+interface SchemaField {
+  name: String!
+}
+
+input SchemaFieldInput {
+  name: String!
+}
+
+input SchemaFieldsInput {
+  addStrings: [SchemaStringFieldInput!]
+  addNumbers: [SchemaNumberFieldInput!]
+  addBooleans: [SchemaBooleanFieldInput!]
+  addArrays: [SchemaArrayFieldInput!]
+  addObjects: [SchemaObjectFieldInput!]
+  addDates: [SchemaDateFieldInput!]
+  addFiles: [SchemaFileFieldInput!]
+  addGeoPoint: SchemaGeoPointFieldInput
+  addPolygons: [SchemaPolygonFieldInput!]
+  addBytes: [SchemaBytesFieldInput!]
+  addPointers: [PointerFieldInput!]
+  addRelations: [RelationFieldInput!]
+  remove: [SchemaFieldInput!]
+}
+
+type SchemaFileField implements SchemaField {
+  name: String!
+}
+
+input SchemaFileFieldInput {
+  name: String!
+}
+
+type SchemaGeoPointField implements SchemaField {
+  name: String!
+}
+
+input SchemaGeoPointFieldInput {
+  name: String!
+}
+
+type SchemaNumberField implements SchemaField {
+  name: String!
+}
+
+input SchemaNumberFieldInput {
+  name: String!
+}
+
+type SchemaObjectField implements SchemaField {
+  name: String!
+}
+
+input SchemaObjectFieldInput {
+  name: String!
+}
+
+type SchemaPointerField implements SchemaField {
+  name: String!
+  targetClassName: String!
+}
+
+type SchemaPolygonField implements SchemaField {
+  name: String!
+}
+
+input SchemaPolygonFieldInput {
+  name: String!
+}
+
+type SchemaRelationField implements SchemaField {
+  name: String!
+  targetClassName: String!
+}
+
+type SchemaStringField implements SchemaField {
+  name: String!
+}
+
+input SchemaStringFieldInput {
+  name: String!
+}
+
+input SearchInput {
+  term: String!
+  language: String
+  caseSensitive: Boolean
+  diacriticSensitive: Boolean
+}
+
+input SelectInput {
+  query: SubqueryInput!
+  key: String!
+}
+
+input SendVerificationEmailInput {
+  email: String!
+  clientMutationId: String
+}
+
+type SendVerificationEmailPayload {
+  ok: Boolean!
+  clientMutationId: String
+}
+
+input SignUpInput {
+  fields: CreateUserFieldsInput
+  clientMutationId: String
+}
+
+type SignUpPayload {
+  viewer: Viewer!
+  clientMutationId: String
+}
+
+input StringWhereInput {
+  equalTo: String
+  notEqualTo: String
+  lessThan: String
+  lessThanOrEqualTo: String
+  greaterThan: String
+  greaterThanOrEqualTo: String
+  in: [String]
+  notIn: [String]
+  exists: Boolean
+  matchesRegex: String
+  options: String
+  text: TextInput
+  inQueryKey: SelectInput
+  notInQueryKey: SelectInput
+}
+
+input SubqueryInput {
+  className: String!
+  where: Object!
+}
+
+input TextInput {
+  search: SearchInput!
+}
+
+input UpdateClassInput {
+  name: String!
+  schemaFields: SchemaFieldsInput
+  clientMutationId: String
+}
+
+type UpdateClassPayload {
+  class: Class!
+  clientMutationId: String
+}
+
+input UpdateMovieFieldsInput {
+  ACL: ACLInput
+  title: String
+  releaseDate: Date
+  seasons: Float
+}
+
+input UpdateMovieInput {
+  id: ID!
+  fields: UpdateMovieFieldsInput
+  clientMutationId: String
+}
+
+type UpdateMoviePayload {
+  movie: Movie!
+  clientMutationId: String
+}
+
+input UpdateRoleFieldsInput {
+  ACL: ACLInput
+  name: String
+  users: UserRelationInput
+  roles: RoleRelationInput
+}
+
+input UpdateRoleInput {
+  id: ID!
+  fields: UpdateRoleFieldsInput
+  clientMutationId: String
+}
+
+type UpdateRolePayload {
+  role: Role!
+  clientMutationId: String
+}
+
+input UpdateUserFieldsInput {
+  ACL: ACLInput
+  username: String
+  password: String
+  email: String
+  emailVerified: Boolean
+  authData: Object
+}
+
+input UpdateUserInput {
+  id: ID!
+  fields: UpdateUserFieldsInput
+  clientMutationId: String
+}
+
+type UpdateUserPayload {
+  user: User!
+  clientMutationId: String
+}
+
+scalar Upload
+
+type User implements ParseObject, Node {
+  id: ID!
+  objectId: ID!
+  createdAt: Date!
+  updatedAt: Date!
+  ACL: ACL!
+  username: String
+  email: String
+  emailVerified: Boolean
+  authData: Object
+}
+
+type UserACL {
+  userId: ID!
+  read: Boolean!
+  write: Boolean!
+}
+
+input UserACLInput {
+  userId: ID!
+  read: Boolean!
+  write: Boolean!
+}
+
+type UserConnection {
+  pageInfo: PageInfo!
+  edges: [UserEdge]
+  count: Int!
+}
+
+type UserEdge {
+  node: User
+  cursor: String!
+}
+
+input UserLoginWithInput {
+  ACL: ACLInput
+  email: String
+  emailVerified: Boolean
+}
+
+enum UserOrder {
+  objectId_ASC
+  objectId_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  ACL_ASC
+  ACL_DESC
+  username_ASC
+  username_DESC
+  password_ASC
+  password_DESC
+  email_ASC
+  email_DESC
+  emailVerified_ASC
+  emailVerified_DESC
+  authData_ASC
+  authData_DESC
+  id_ASC
+  id_DESC
+}
+
+input UserPointerInput {
+  link: ID
+  createAndLink: CreateUserFieldsInput
+}
+
+input UserRelationInput {
+  add: [ID!]
+  remove: [ID!]
+  createAndAdd: [CreateUserFieldsInput!]
+}
+
+input UserRelationWhereInput {
+  have: UserWhereInput
+  haveNot: UserWhereInput
+  exists: Boolean
+}
+
+input UserWhereInput {
+  objectId: IdWhereInput
+  createdAt: DateWhereInput
+  updatedAt: DateWhereInput
+  ACL: ObjectWhereInput
+  username: StringWhereInput
+  password: StringWhereInput
+  email: StringWhereInput
+  emailVerified: BooleanWhereInput
+  authData: ObjectWhereInput
+  id: IdWhereInput
+  OR: [UserWhereInput!]
+  AND: [UserWhereInput!]
+  NOR: [UserWhereInput!]
+}
+
+type Viewer {
+  sessionToken: String!
+  user: User!
+}
+
+input WithinInput {
+  box: BoxInput!
+}
+
