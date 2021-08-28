@@ -11,8 +11,8 @@ sealed class GraphQlResponse<T> {
     companion object {
         private const val ERROR_MESSAGE = "Something went wrong!"
 
-        fun <T> create(response: T) = Success(response)
+        fun <T> success(response: T) = Success(response)
 
-        fun <T> create(exception: Exception) = Error<T>(exception.message ?: ERROR_MESSAGE)
+        fun <T> error(exception: Exception = Exception(ERROR_MESSAGE)) = Error<T>(exception.message ?: ERROR_MESSAGE)
     }
 }

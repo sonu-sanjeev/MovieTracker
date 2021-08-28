@@ -7,18 +7,19 @@ import com.myapp.movietracker.api.GraphQlResponse
 
 class MoviesRepositoryImpl : MoviesRepository {
 
-    override suspend fun getMovies(first: Int): GraphQlResponse<GetMoviesQuery.Movies> {
+    override suspend fun getMovies(count: Int): GraphQlResponse<GetMoviesQuery.Movies> {
         return try {
             val response =
-                GraphQlApolloClient.apolloClient.query(GetMoviesQuery(first)).await()
+                GraphQlApolloClient.apolloClient.query(GetMoviesQuery(count)).await()
 
-            if (!response.hasErrors() && response.data != null) {
-                GraphQlResponse.create(response.data!!.movies)
+            val data = response.data
+            if (!response.hasErrors() && data != null) {
+                GraphQlResponse.success(data.movies)
             } else {
-                GraphQlResponse.create(Exception())
+                GraphQlResponse.error()
             }
         } catch (exception: Exception) {
-            GraphQlResponse.create(exception)
+            GraphQlResponse.error(exception)
         }
     }
 }
