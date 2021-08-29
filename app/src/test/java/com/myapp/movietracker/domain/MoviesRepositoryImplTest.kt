@@ -20,7 +20,7 @@ class MoviesRepositoryImplTest {
     }
 
     @Test
-    fun `test getMovies query on success`() {
+    fun `query graphql to fetch movies`() {
         val response = runBlocking {
             moviesRepository.getMovies(10)
         }
@@ -30,7 +30,7 @@ class MoviesRepositoryImplTest {
     }
 
     @Test
-    fun `test getMovies query with negative count`() {
+    fun `query graphql with negative count`() {
         val response = runBlocking {
             moviesRepository.getMovies(-5)
         }
@@ -40,14 +40,32 @@ class MoviesRepositoryImplTest {
     }
 
     @Test
-    fun  `test createMovie mutation on success`() {
+    fun  `mutate graphql to create a movie entry`() {
+        val createMovieInput =
+            CreateMovieInput(Input.fromNullable(CreateMovieFieldsInput(title = "A new movie")))
+        val response = runBlocking {
+            moviesRepository.createMovie(createMovieInput)
+        }
 
+        assertThat(response).isNotNull()
+        assertThat(response).isInstanceOf(GraphQlResponse.Success::class.java)
+    }
+
+    @Test
+    fun  `mutate graphql to create a movie entry with invalid inputs`() {
+        val createMovieInput = CreateMovieInput(Input.absent())
+        val response = runBlocking {
+            moviesRepository.createMovie(createMovieInput)
+        }
+
+        assertThat(response).isNotNull()
+        assertThat(response).isInstanceOf(GraphQlResponse.Error::class.java)
     }
 
     @Test
     fun `test date conversion`() {
         val str = "2014-11-07T00:00:00.000Z"
-        val r = str.getDate()
-        assertThat(r).isEqualTo("07-11-2014")
+        val date = str.getDate()
+        assertThat(date).isEqualTo("07-11-2014")
     }
 }

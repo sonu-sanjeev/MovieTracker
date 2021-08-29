@@ -1,0 +1,12 @@
+query GetMovies($count: Int!) {
+  movies(first: $count) {
+    edges {
+      node {
+        title
+        releaseDate
+        seasons
+      }
+    }
+  }
+}
+

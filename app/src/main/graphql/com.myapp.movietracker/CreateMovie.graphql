@@ -1,18 +1,7 @@
-query GetMovies($count: Int!) {
-  movies(first: $count) {
-    edges {
-      node {
-        title
-        releaseDate
-        seasons
-      }
-    }
-  }
-}
-
 mutation CreateMovie($createMovieInput: CreateMovieInput!) {
   createMovie(input: $createMovieInput) {
     movie {
+      id
       title
       releaseDate
       seasons
