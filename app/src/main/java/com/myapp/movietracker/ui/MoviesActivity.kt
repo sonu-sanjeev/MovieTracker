@@ -11,16 +11,18 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import com.myapp.movietracker.GetMoviesQuery
@@ -30,6 +32,7 @@ import com.myapp.movietracker.domain.*
 import com.myapp.movietracker.ui.theme.SecondaryTextColor
 import com.myapp.movietracker.ui.viewmodel.MoviesViewModel
 import com.myapp.movietracker.ui.viewmodel.MoviesViewModelFactory
+import com.myapp.movietracker.util.Event
 import com.myapp.movietracker.util.getDate
 
 class MoviesActivity : ComponentActivity() {
@@ -72,7 +75,8 @@ class MoviesActivity : ComponentActivity() {
 fun HomeScreen(moviesViewModel: MoviesViewModel) {
     val isLoading by moviesViewModel.isLoading.observeAsState(false)
     val movies by moviesViewModel.movies.observeAsState(listOf())
-    val error by moviesViewModel.error.observeAsState("")
+    val error by moviesViewModel.error.observeAsState(Event(""))
+    val newMovie by moviesViewModel.newMovie.observeAsState()
     val isAddMovieScreen by moviesViewModel.isAddMovies.observeAsState(false)
 
     Scaffold(
@@ -91,12 +95,28 @@ fun HomeScreen(moviesViewModel: MoviesViewModel) {
             )
         },
         content = {
+            when {
+                isLoading -> {
+                    CenterProgressBar()
+                }
+                (error.getContentIfNotHandled()?.isNotBlank() == true) -> {
+                    Toast.makeText(LocalContext.current, error.peekContent(), Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
             if (isAddMovieScreen) {
                 AddMovieScreen {
-
+                    moviesViewModel.addNewMovie(it.first, it.second, it.third)
+                }
+                newMovie?.getContentIfNotHandled()?.let {
+                    Toast.makeText(
+                        LocalContext.current,
+                        "${stringResource(id = R.string.new_movie_with_id)}${it.id}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             } else {
-                MovieListScreen(movies = movies, isLoading = isLoading, error = error)
+                MovieListScreen(movies = movies)
             }
         }
     )
@@ -104,34 +124,19 @@ fun HomeScreen(moviesViewModel: MoviesViewModel) {
 
 
 @Composable
-fun MovieListScreen(
-    movies: List<GetMoviesQuery.Node>,
-    isLoading: Boolean,
-    error: String,
-) {
-    when {
-        isLoading -> {
-            CenterProgressBar()
-        }
-        error.isNotBlank() -> {
-            Toast.makeText(LocalContext.current, error, Toast.LENGTH_SHORT).show()
-        }
-        else -> {
-            LazyColumn {
-                items(movies) { movie ->
-                    MovieCard(movie = movie)
-                }
-            }
+fun MovieListScreen(movies: List<GetMoviesQuery.Node>) {
+    LazyColumn {
+        items(movies) { movie ->
+            MovieCard(movie = movie)
         }
     }
 }
 
 @Composable
 fun CenterProgressBar() {
-    Column(
+    Box(
         Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator()
     }
@@ -188,7 +193,17 @@ fun MovieCard(movie: GetMoviesQuery.Node) {
 }
 
 @Composable
-fun AddMovieScreen(onAddClick: () -> Unit) {
+fun AddMovieScreen(onAddClick: (Triple<String, String, String>) -> Unit) {
+    var movieName by rememberSaveable {
+        mutableStateOf("")
+    }
+    var releaseDate by rememberSaveable {
+        mutableStateOf("")
+    }
+    var season by rememberSaveable {
+        mutableStateOf("")
+    }
+
     Column(
         Modifier
             .fillMaxSize()
@@ -201,28 +216,32 @@ fun AddMovieScreen(onAddClick: () -> Unit) {
         )
         Spacer(modifier = Modifier.height(4.dp))
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = movieName,
+            onValueChange = { movieName = it },
             label = { Text(text = stringResource(R.string.movie_name)) },
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(4.dp))
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label = { Text(text = stringResource(R.string.release_date)) },
-            modifier = Modifier.fillMaxWidth()
+            value = releaseDate,
+            onValueChange = { releaseDate = it },
+            label = { Text(text = stringResource(R.string.release_date_hint)) },
+            modifier = Modifier
+                .fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(4.dp))
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = season,
+            onValueChange = { season = it },
             label = { Text(text = stringResource(R.string.season)) },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                onAddClick(Triple(movieName, releaseDate, season))
+            },
             Modifier
                 .width(150.dp)
                 .padding(all = 8.dp)
@@ -231,3 +250,4 @@ fun AddMovieScreen(onAddClick: () -> Unit) {
         }
     }
 }
+

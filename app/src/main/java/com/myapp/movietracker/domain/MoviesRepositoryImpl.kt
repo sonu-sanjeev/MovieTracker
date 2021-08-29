@@ -1,6 +1,7 @@
 package com.myapp.movietracker.domain
 
 import com.apollographql.apollo.coroutines.await
+import com.apollographql.apollo.exception.ApolloException
 import com.myapp.movietracker.CreateMovieMutation
 import com.myapp.movietracker.GetMoviesQuery
 import com.myapp.movietracker.api.GraphQlApolloClient
@@ -18,9 +19,12 @@ class MoviesRepositoryImpl : MoviesRepository {
             if (!response.hasErrors() && data != null) {
                 GraphQlResponse.success(data.movies)
             } else {
-                GraphQlResponse.error()
+                val error = response.errors?.firstOrNull()
+                error?.let { GraphQlResponse.error(Exception(it.message)) } ?: kotlin.run {
+                    GraphQlResponse.error()
+                }
             }
-        } catch (exception: Exception) {
+        } catch (exception: ApolloException) {
             GraphQlResponse.error(exception)
         }
     }
@@ -33,9 +37,12 @@ class MoviesRepositoryImpl : MoviesRepository {
             if (!response.hasErrors() && data != null) {
                 GraphQlResponse.success(data.movie)
             } else {
-                GraphQlResponse.error()
+                val error = response.errors?.firstOrNull()
+                error?.let { GraphQlResponse.error(Exception(it.message)) } ?: kotlin.run {
+                    GraphQlResponse.error()
+                }
             }
-        } catch (exception: Exception) {
+        } catch (exception: ApolloException) {
             GraphQlResponse.error(exception)
         }
     }

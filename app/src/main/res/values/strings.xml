@@ -6,6 +6,10 @@
     <string name="add_movie">Add Movie</string>
     <string name="movie_name">Movie Name:</string>
     <string name="release_date">Release Date:</string>
+    <string name="release_date_hint">Release Date: YYYY-MM-DD</string>
     <string name="season">Season:</string>
     <string name="add">ADD</string>
+    <string name="new_movie_with_id">\"New movie added with id: \"</string>
+    <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
 </resources>
